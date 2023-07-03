@@ -1,0 +1,59 @@
+---
+format: html
+---
+
+## Download jazz songs data
+
+```{python}
+import requests
+from bs4 import BeautifulSoup
+  
+URL = "https://jazzomat.hfm-weimar.de/dbformat/" 
+
+r = requests.get(URL + "dbcontent.html")
+soup = BeautifulSoup(r.content, 'html5lib') 
+```
+
+```{python}
+#| eval: false
+# Example of how to 'acces HTML data' from a python string
+BeautifulSoup("<span>uwu</span>", "html.parser").select('span')
+```
+
+```{python}
+# Get HTML anchors for songs
+songs_links = soup.select('td > p > a.reference.internal')
+# Get links for songs
+songs_links = [URL + anchor.get('href') for anchor in songs_links]
+```
+
+```{python}
+# Get HTML content of each song's page
+songs_content = [BeautifulSoup(requests.get(link).content, 'html5lib') for link in songs_links]
+```
+
+```{python}
+# Get song's title and author
+songs_title_author = [content.select('title')[0].get_text().split("—")[0] for content in songs_content]
+
+# Read chord progression as a string
+songs_progressions = [content.select('div.highlight')[0].get_text() for content in songs_content]
+```
+
+```{python}
+print(songs_progressions[0])
+```
+
+```{python}
+import pandas as pd
+
+songs_data = {
+  'songs_links': songs_links,
+  'songs_title_author': songs_title_author,
+  'songs_progressions': songs_progressions,
+  'songs_content': songs_content
+}
+
+df = pd.DataFrame.from_dict(songs_data)
+df.to_csv("./data/00-songs-data.csv", sep = ",", index = False)
+```

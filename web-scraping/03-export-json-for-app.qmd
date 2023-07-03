@@ -1,0 +1,26 @@
+---
+format: html
+---
+
+```{python}
+import pandas as pd
+
+df = pd.read_csv("./data/02-songs-data.csv")
+df.head()
+```
+
+```{python}
+scrapped_progressions = (df
+  .set_index('songs_title_author')
+  .songs_progressions
+  .to_dict()
+)
+```
+
+```{python}
+import json
+
+with open('../data/web-scrapped-chord-progressions.json', 'w') as fp:
+  json.dump(scrapped_progressions, fp, indent = 2)
+```
+

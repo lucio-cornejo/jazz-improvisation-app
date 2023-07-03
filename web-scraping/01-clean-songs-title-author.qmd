@@ -1,0 +1,130 @@
+---
+format: html
+---
+
+## Clean scrapped strings 
+
+```{python}
+import re
+import pandas as pd
+df = pd.read_csv("./data/00-songs-data.csv")
+```
+
+```{python}
+# ------------------------------------ #
+# Fix characters in songs_title_author #
+# ------------------------------------ #
+# Replace “ 
+df["songs_title_author"] = (df["songs_title_author"]
+  .str.replace('“', '- ', regex = True)
+)
+# Replace ”
+df["songs_title_author"] = (df["songs_title_author"]
+  .str.replace('” ', '', regex = True)
+)
+# Replace ’
+df["songs_title_author"] = (df["songs_title_author"]
+  .str.replace("’", "'", regex = True)
+)
+
+df.head(16)
+```
+
+```{python}
+# Change songs_title_author values
+# to song name first; then, author
+def permute_song_author(title):
+  author_song = re.split(r"[\s]+-[\s]+", title)
+
+  return author_song[1] + ' - ' + author_song[0]
+
+df["songs_title_author"] = df["songs_title_author"].apply(permute_song_author)
+```
+
+```{python}
+# Drop column songs_content and order by song title
+df = (df
+  .drop('songs_content', 1)
+  .sort_values(by = ['songs_title_author'])
+  .reset_index(drop = True)
+)
+df.head()
+
+df.to_csv("./data/01-songs-data.csv", sep = ",", index = False)
+```
+
+## Change chords notation
+
+```{python}
+# Extract some chord progression
+print(df["songs_progressions"][181])
+
+test = df["songs_progressions"][181]
+test = re.sub('[\s]+[|]', '|', test)
+
+test = re.split("\n", test)
+test.pop()
+
+# Remove chord sections
+test = [
+  re.sub('^[^||]*||', '', el)[2:-2]
+  for el in test  
+]
+test
+```
+
+In this section, there are at least two ways to tackle
+the problem of dealing with the notation of the scrapped chords.
+
+### Method 1: Convert chords to notes
+
+The following code works in the pseudo-repl textarea of
+the app:
+
+```{.js}
+note("<[g3,b3,e4]!2 [[a3,c3,e4] [b3,d3,f#4]]>")
+```
+
+- Benefits:
+    - More control over every chord voicing.
+    - Can deal with chord types still not implemented
+    (that I know of) in Strudel, such as min9 chords.
+
+- Disadvantages:
+    - The **.voicings()** method does not seem to 
+    work with this type of notation.
+    - Extra work is required in order to convert
+    every scrapped chord to a notes representation of it.
+
+### Method 2: Convert scrapped chord notation to Strudel's
+
+If the notation of the scrapped chords is changed to one
+that Strudel can work with, the following type of code 
+could be applied in the app:
+
+```{.js}
+// John Coltrane - Giant Steps
+setVoicingRange('lefthand', ['E3', 'G4']);
+
+stack(
+  seq(
+    "[B^7 D7] [G^7 Bb7] Eb^7 [Am7 D7]",
+    "[G^7 Bb7] [Eb^7 F#7] B^7 [Fm7 Bb7]",
+    "Eb^7 [Am7 D7] G^7 [C#m7 F#7]",
+    "B^7 [Fm7 Bb7] Eb^7 [C#m7 F#7]"
+  ).voicings('lefthand').color('#7ED321')
+).slow(20).note()
+```
+
+- Benefits:
+    - Less work is required to convert the scrapped
+    chords into some that Strudel recognizes.
+    - The method **.voicings()** can be used.
+
+- Disadvantage(s?):
+    - A redefinition is required for every
+    scrapped chord type to be recognized by Strudel.
+
+## Conclusion
+
+For now, we'll settle for method 2.

@@ -1,0 +1,53 @@
+#add-row-of-notes { font-size: 1.23rem; }
+
+div:has(> #play-chords) {
+  display: grid;
+  row-gap: 100px;
+  justify-items: center;
+  grid-template-columns: 1fr 1fr;
+}
+
+div:has(> #play-chords) > *:first-child {
+  margin: 0;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 3;
+}
+div:has(> #play-chords) > *:nth-child(2) {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+div:has(> #play-chords) > *:nth-child(3) {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+
+/* Icons to play or stop the chord progression */
+:is(#play-chords, #stop-chords) > i{
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 100%;
+  transform: scale(1.25);
+  background-color: salmon;
+  box-shadow: 0 0 5px 3px crimson;
+}
+#play-chords:active, #stop-chords:active { filter: invert(1); }
+
+/* Text of code for Strudel */
+#code-text {
+  height: 25vh;
+  width: 100%;
+  max-width: 100%;
+  border: 0; 
+  border-radius: 15px;
+  padding: 5px 15px;
+  color: palegreen; 
+  font-size: 1.3em; 
+  font-family: monospace;
+  background: black; 
+}

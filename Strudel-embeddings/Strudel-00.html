@@ -1,0 +1,79 @@
+<script>
+  /* 
+    Inspiration for this code:
+      https://github.com/tidalcycles/strudel/tree/main/packages/embed#strudelcyclesembed 
+  */
+
+  /*
+    This js file is used when Strudel is embedded via
+    the method in "Strudel-01.html". 
+    
+    If "embed-Strudel.html" is used instead,
+    then this file is probably not useful, due
+    to being able to change Strudel's pattern
+    simply via changin the innerText of
+    the relevant textarea HTML element.
+  */
+
+  /*
+    Generate the code for a new Strudel repl,
+    delete the previous repl and insert a new one
+    with the necessary music code.
+    The user will have to manually click start and stop
+    for such repl to start playing sounds.
+  */
+  function createStrudelREPL(userCode) {
+    // userCode variable example: "note('c3')"
+    const code = userCode.trim()
+    setTimeout(() => {
+      const iframe = document.createElement('iframe');
+      const src = `https://strudel.tidalcycles.org/#${encodeURIComponent(btoa(code))}`;
+      iframe.setAttribute('src', src);
+      iframe.setAttribute('width', '600');
+      iframe.setAttribute('height', '400');
+      iframe.classList.add("strudel-repl");
+
+      // Only have one Strudel repl in the page
+      $('.strudel-repl').map(function() { this.remove() });
+      document.body.appendChild(iframe);
+    });
+  }
+
+  /*
+    Possible user codes, thanks to this repl:
+
+    samples({
+      bd: 'bd/BT0A0D0.wav',
+      sn: 'sn/ST0T0S3.wav',
+      hh: 'hh/000_hh3closedhh.wav'
+    }, 'https://loophole-letters.vercel.app/samples/tidal/')
+
+    stack(
+      "<bd!3 bd(3,4,3)>".color('#F5A623'),
+      "hh*4".color('#673AB7'),
+      "~ <sn!3 sn(3,4,2)>".color('#4CAF50')
+    ).s()
+    .pianoroll({fold:1})
+
+
+
+  // licensed with CC BY-NC-SA 4.0 https://creativecommons.org/licenses/by-nc-sa/4.0/
+  // by Felix Roos
+  // livecode.orc by Steven Yi
+  await loadOrc('github:kunstmusik/csound-live-code/master/livecode.orc')
+
+  stack(
+    note("<C^7 A7 Dm7 Fm7>/2".voicings('lefthand'))
+    .cutoff(sine.range(500,2000).round().slow(16))
+    .euclidLegato(3,8).csound('FM1')
+    ,
+    note("<C2 A1 D2 F2>/2").ply(8).csound('Bass').gain("1 4 1 4")
+    ,
+    note("0 7 [4 3] 2".fast(2/3).off(".25 .125",add("<2 4 -3 -1>"))
+    .slow(2).scale('A4 minor'))
+    .legato(.25).csound('SynHarp')
+    ,
+    s("bd*2,[~ hh]*2,~ cp").bank('RolandTR909')
+  )
+  */
+</script>

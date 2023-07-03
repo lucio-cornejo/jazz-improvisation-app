@@ -1,0 +1,42 @@
+/* Initially hide container */
+.box:has(#degree-colors) {
+  display: none;
+}
+
+#degree-colors {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-around;
+}
+
+/* Variables for musical degree colors */
+:root {
+  --degree-1: rgb(0, 128, 0);
+  --degree-b2: rgb(120, 120, 120);
+  --degree-2: rgb(255, 0, 0);
+  --degree-b3: rgb(50, 50, 200);
+  --degree-3: rgb(100, 128, 0);
+  --degree-4: rgb(50, 50, 200);
+  --degree-b5: rgb(120, 120, 120);
+  --degree-5: rgb(128, 100, 0);
+  --degree-b6: rgb(120, 120, 120);
+  --degree-6: rgb(255, 0, 0);
+  --degree-b7: rgb(50, 50, 200);
+  --degree-7: rgb(150, 80, 0);
+}
+
+/* Default musical degree colors for notes */
+.degree-1 { background-color: var(--degree-1); }
+.degree-b2 { background-color: var(--degree-b2); }
+.degree-2 { background-color: var(--degree-2); }
+.degree-b3 { background-color: var(--degree-b3); }
+.degree-3 { background-color: var(--degree-3); }
+.degree-4 { background-color: var(--degree-4); }
+.degree-b5 { background-color: var(--degree-b5); }
+.degree-5 { background-color: var(--degree-5); }
+.degree-b6 { background-color: var(--degree-b6); }
+.degree-6 { background-color: var(--degree-6); }
+.degree-b7 { background-color: var(--degree-b7); }
+.degree-7 { background-color: var(--degree-7); }

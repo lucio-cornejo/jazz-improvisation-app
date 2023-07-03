@@ -1,0 +1,152 @@
+---
+format: html
+---
+
+```{python}
+import re
+import pandas as pd
+
+df = pd.read_csv("./data/01-songs-data.csv")
+df.head()
+```
+
+```{python}
+# Indices before resseting it, but still useful as are.
+to_test = [26, 56, 78, 99, 181]  # 78, specialy
+case = to_test[4]
+
+test = df["songs_progressions"][case]
+# Replace any positive amount of empty spaces, by a single one
+test = re.sub(" +", " ", test)
+print(test)
+
+# Remove spaces before "|" character
+test = re.sub('[\s]+[|]', '|', test)
+
+# Replace "NC" with "~", to function as silence/(no chord)
+test = re.sub(r"[\s]*NC", " ~", test)
+
+# Add a space prior to note character
+test = re.sub(
+  # r"(\w)([A-G])", r"\1 \2", test
+  r"([^\W])([A-G])", r"\1 \2", test
+)
+# print(test)
+
+# Split by song section (A1, B1, etc)
+test = re.split("\n", test)
+# Remove empty string element created
+test.pop()
+# print(test)
+
+# Remove chord sections
+test = [
+  re.sub('^[^||]*||', '', el)[2:-2]
+  for el in test  
+]
+# Important cases to cover
+#   'NC Fb-7 A#sus|Csus G#sus79',
+#   'Ab-|D6911# Ej7 Eb-7911#',
+#   'Gm7b5 Do | Dbo7 F+ E+7 G+j79b',
+#   'D79b E7alt'
+# print(test)
+
+# Separate by chord sections
+test_sections = [
+  re.split("\|", section)
+  for section in test
+]
+# print(test_sections)
+
+# Separate by bars
+# test_bars = [
+#   re.split('[^\w\sb#/+-~]', bar)
+#   for section in test_sections
+#   for bar in section
+# ]
+# print(test_bars)
+
+# For every bar, group chords via [], if there is 
+# more than one, so that Strudel recognizes the bar
+strudel_sections = []
+for section in test_sections:
+  strudel_section = []
+  for bar in section:
+    strudel_section.append(
+      '[' + bar + ']' if ' ' in bar else bar
+    )
+  strudel_sections.append(strudel_section)
+print(strudel_sections)
+```
+
+```{python}
+def get_chords_by_bar(progression):
+  test = progression
+
+  # Replace any amount of empty spaces, by a single one
+  test = re.sub(" +", " ", test)
+
+  # Remove spaces before "|" character
+  test = re.sub('[\s]+[|]', '|', test)
+
+  # Replace "NC" with "~", to function as silence/(no chord)
+  test = re.sub(r"[\s]*NC", " ~", test)
+
+  # Add a space prior to note character
+  test = re.sub(
+    # r"(\w)([A-G])", r"\1 \2", test
+    r"([^\W])([A-G])", r"\1 \2", test
+  )
+
+  # Split by song section (A1, B1, etc)
+  test = re.split("\n", test)
+  # Remove empty string element created
+  test.pop()
+
+  # Remove chord sections
+  test = [
+    re.sub('^[^||]*||', '', el)[2:-2]
+    for el in test  
+  ]
+
+  # Separate by chord sections
+  test_sections = [
+    re.split("\|", section)
+    for section in test
+  ]
+
+  # Separate by bars
+  # test_bars = [
+  #   re.split('[^\w\sb#/+-~]', bar)
+  #   for section in test_sections
+  #   for bar in section
+  # ]
+
+  # For every bar, group chords via [], if there is 
+  # more than one, so that Strudel recognizes the bar
+  strudel_sections = []
+  for section in test_sections:
+    strudel_section = []
+    for bar in section:
+      strudel_section.append(
+        '[' + bar + ']' if ' ' in bar else bar
+      )
+    strudel_sections.append(strudel_section)
+
+  return strudel_sections
+```
+
+
+```{python}
+row = 300
+case = df["songs_progressions"][row]
+print(case)
+print(get_chords_by_bar(case))
+```
+
+```{python}
+df.songs_progressions = df.songs_progressions.apply(get_chords_by_bar)
+
+df.head()
+df.to_csv("./data/02-songs-data.csv", sep = ",", index = False)
+```

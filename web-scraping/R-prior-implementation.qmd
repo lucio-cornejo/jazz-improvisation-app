@@ -1,0 +1,433 @@
+---
+format: html
+---
+
+```{r}
+library(dplyr)
+library(stringr)
+df <- read.csv("../data/songs_data.csv", encoding = "UTF-8")
+```
+
+```{r}
+# Change the symbols “ and ” present in the data extracted
+df <- df |>
+  mutate(
+    songs_title_author =  songs_title_author |>
+      str_replace("“", "- ") |>
+      str_replace("”", " ") |>
+      # Remove last empty space
+      str_sub(1, -2L)
+  )
+```
+
+```{r}
+# Important to check at least cases of 
+# rows 1, 27, 57, 79, 100 and 182
+
+test <- df$songs_progressions[27]
+# test <- df$songs_progressions[57]
+# test <- df$songs_progressions[79]
+# test <- df$songs_progressions[100]
+# This next case was a website error, 
+# via labelling a section as A'2 instead of A2
+# test <- df$songs_progressions[182]  
+
+test <- test |>
+  # Remove break line from different sections
+  stringr::str_split("\n") |>
+  unlist() |>
+  # Remove : symbol from different sections
+  stringr::str_split(":") |>
+  unlist() |>
+  # Remove empty spaces and reduce || symbols
+  sapply(function(x) gsub(' ','', x), USE.NAMES = FALSE) |>
+  sapply(function(x) gsub('\\|\\|','\\|', x), USE.NAMES = FALSE) |>
+  # Only filter the actual chords (no sections)
+  (\(x) Filter(function(y) return(nchar(y) > 2), x))() |>
+  # Avoid issue as in row 182, where "A'2" is present
+  (\(x) Filter(function(y) return(!grepl("'", y, fixed = TRUE)), x))()
+  
+print(test)
+```
+
+
+```{r}
+get_progression <- function(progression_string) {
+  progression_string <- progression_string |>
+    # Remove break line from different sections
+    stringr::str_split("\n") |>
+    unlist() |>
+    # Remove : symbol from different sections
+    stringr::str_split(":") |>
+    unlist() |>
+    # Remove empty spaces
+    sapply(function(x) gsub(' ', '', x), USE.NAMES = FALSE) |>
+    # Reduce || symbols to |
+    sapply(function(x) gsub('\\|\\|', '\\|', x), USE.NAMES = FALSE) |>
+    # Only filter the actual chords (no sections)
+    (\(x) Filter(function(y) return(nchar(y) > 2), x))() |>
+    # Avoid issue as in row 182, where "A'2" is present
+    (\(x) Filter(function(y) return(!grepl("'", y, fixed = TRUE)), x))() |>
+    as.list() |>
+    # Remove | separator, to get chords in each bar
+    sapply(function(x) stringr::str_split(x, pattern = '\\|'), USE.NAMES = FALSE)
+
+  # Remove unnecessary strings generated
+  for (i in 1:length(progression_string)) {
+    progression_string[[i]] <- 
+      progression_string[[i]][-c(1, length(progression_string[[i]]))]
+  }
+
+  return(progression_string)
+}
+
+get_chords <- function(bar) {
+  # Split via uppercase letter (note)
+  chords <- unlist(stringr::str_split(bar, "(?=[[:upper:]])"))[-1]
+
+  # Deal with possible errors due to slash chords (G/C and such)
+  new_chords <- c()
+  for (i in 1:length(chords)) {
+    # Check if "/" is present
+    if (grepl("/", chords[i], fixed = TRUE)) {
+      # Concatenate the two 'chords'
+      new_chords <- append(
+        new_chords, 
+        paste0(chords[i], chords[min(c(i+1, length(chords)))])
+      )
+    }
+  }
+
+  if (length(new_chords) > 0) {
+    return(new_chords)
+  }
+  
+  return(chords)
+}
+```
+
+```{r}
+musical_accidents <- c("b", "#")
+
+pitch_class <- list(
+  "C" = 0, "C#" = 1, "Cb" = 11,
+  "D" = 2, "D#" = 3, "Db" = 1,
+  "E" = 4, "E#" = 5, "Eb" = 3,
+  "F" = 5, "F#" = 6, "Fb" = 4,
+  "G" = 7, "G#" = 8, "Gb" = 6,
+  "A" = 9, "A#" = 10, "Ab" = 8,
+  "B" = 11, "B#" = 0, "Bb" = 10 
+)
+
+chord_sintax <- list(
+  "NC" = "no_chord",
+  "-" = c(3, 7),
+  "sus" = c(4, 5),
+  "7" = c(4, 7, 10),
+  "6" = c(4, 7, 9),
+  "69" = c(2, 4, 9),
+  "6911#" = c(2, 4, 6, 9),
+  "-6" = c(3, 7, 9),
+  "-69" = c(2, 3, 9),
+  "j7" = c(4, 7, 11),
+  "j79" = c(2, 4, 7, 11),
+  "j7911#" = c(2, 4, 6, 11),
+  "j79#11#" = c(3, 6, 11), # include third degree?
+  "-7" = c(3, 7, 10),
+  "-79" = c(2, 3, 7, 10),
+  "-7911" = c(2, 3, 5, 10),
+  "m7b5" = c(3, 6, 10),
+  "o" = c(3, 6),
+  "o7" = c(3, 6, 9),
+  "+" = c(4, 8),
+  "+7" = c(4, 8, 10),
+  "+j7" = c(4, 8, 11),
+  "+79" = c(2, 4, 8, 10),
+  "+79b" = c(1, 4, 8, 10),
+  "+79#" = c(3, 4, 8, 10),
+  "sus7" = c(5, 7, 10),
+  "sus79" = c(2, 5, 7, 10),
+  "sus7913" = c(2, 5, 9, 10),
+  "79" = c(2, 4, 7, 10),
+  "79b" = c(1, 4, 7, 10),
+  "79#" = c(3, 4, 7, 10),
+  "7911" = c(2, 4, 5, 10),
+  "7911#" = c(2, 4, 6, 10),
+  "7913" = c(2, 4, 9, 10),
+  "79b13" = c(1, 4, 9, 10),
+  "79#13" = c(3, 4, 9, 10),
+  "7913b" = c(2, 4, 8, 10),
+  "7alt" = c(1, 4, 8, 10)
+)
+
+translate_chord <- function(chord) {
+  # Check if chord is of the form "E", "C", ..
+  if (nchar(chord) == 1) { 
+    # The chord type is major
+    root <- unlist(
+      pitch_class[stringr::str_sub(chord, 1, 1)]
+    ) |> unname()
+    
+    # Return pitch classes 
+    chord_pitch_classes <- c(
+      root, (root + 4)%%12, (root + 7)%%12
+    ) |>
+      as.character() |> 
+      paste(collapse = '-')
+    
+    return(chord_pitch_classes)
+  }
+  
+  if (nchar(chord) == 2) { 
+    # Check for flat or sharp note
+    if (stringr::str_sub(chord, 2, 2) %in% musical_accidents) {
+      # The chord type is major
+      root <- unlist(
+        pitch_class[stringr::str_sub(chord, 1, 1)]
+      ) |> unname()
+
+      # Return pitch classes 
+      chord_pitch_classes <- c(
+        root, (root + 4)%%12, (root + 7)%%12
+      ) |>
+        as.character() |> 
+        paste(collapse = '-')
+
+      return(chord_pitch_classes)
+    }
+    # Check if no chord is played
+    if (stringr::str_sub(chord, 1, 2) == "NC") { return("NC") }
+  }
+
+  # ::::::::::::::::::::::::::::::::::::::::::::::::
+  # Chord's string length is equal or greater than 2
+  # ::::::::::::::::::::::::::::::::::::::::::::::::
+  root <- NULL
+  chord_type <- NULL
+  
+  # Check for flat or sharp note
+  if (stringr::str_sub(chord, 2, 2) %in% musical_accidents) {
+    root <- stringr::str_sub(chord, 1, 2)
+    chord_type <- stringr::str_sub(chord, 3, nchar(chord))
+  } else {
+    # No flat nor sharp
+    root <- stringr::str_sub(chord, 1, 1)
+    chord_type <- stringr::str_sub(chord, 2, nchar(chord))
+  }
+
+  # Check if the chord is a 'slash chord' (C/G type)
+  bass <- NULL
+  if (grepl("/", chord_type, fixed = TRUE)) {
+    chord_type <- unlist(stringr::str_split(chord_type, "/"))
+    # Get bass note
+    bass <- chord_type[2]
+    # Check for cases like Eb/Bb or C/E
+    if (chord_type[1] == "") {
+      # Chord type is major
+      root <- unname(unlist(pitch_class[root]))
+      bass <- unname(unlist(pitch_class[bass]))
+
+      chord_pitch_classes <- c(
+        root, (root + 4)%%12, (root + 7)%%12, bass
+      ) |>
+        # Avoid pitch class repetition
+        unique() |>
+        as.character() |> 
+        paste(collapse = '-')
+
+      return(chord_pitch_classes)
+    } else {
+      # Get actual chord type
+      chord_type <- chord_type[1]
+    }
+  }
+
+  # Transform chord's string data to pitch class values
+  root <- unname(unlist(pitch_class[root]))
+  chord_type <- unname(unlist(chord_sintax[chord_type]))
+  
+  if (is.null(bass)) {
+    chord_pitch_classes <- as.character(
+      c(root, (root + chord_type) %% 12)
+    ) |> paste(collapse = '-')
+    
+    return(chord_pitch_classes)
+  }
+
+  bass <- unname(unlist(pitch_class[bass]))
+
+  chord_pitch_classes <- as.character(
+    c(root, (root + chord_type) %% 12, bass)
+  ) |> 
+    # Do not repeat any pitch class, in case
+    # the slash chord indicated chord inversion
+    unique() |> paste(collapse = '-')
+    
+  return(chord_pitch_classes)
+}  
+```
+
+```{r}
+row <- nrow(df)
+
+df$songs_progressions[row] |>
+  get_progression() |>
+  print()
+
+cat("\n")
+
+chord_names <- df$songs_progressions[row] |>
+  get_progression() |>
+  lapply(get_chords) |>
+  lapply(function(x) Filter(function(y) return(y != ""), x)) |>
+  unlist()
+
+chord_pitches <- sapply(chord_names, translate_chord)
+
+names(chord_pitches) <- chord_names
+
+print(chord_pitches)
+```
+
+## Get all chord types in this data base
+
+```{r}
+chords_types <- c()
+
+for (fila in 1:456) {
+  chord_names <- df$songs_progressions[fila] |>
+    get_progression() |>
+    lapply(get_chords) |>
+    lapply(function(x) Filter(function(y) return(y != ""), x)) |>
+    unlist()
+
+  chords_types <<- unique(c(chords_types, chord_names))
+}
+
+chords_types <- stringr::str_sub(chords_types, 2, nchar(chords_types))
+# chords_types <- sapply(
+  # chords_types,
+  # function(type) {
+    # if (stringr::str_sub(type, 2, 2) %in% musical_accidents) {
+      # return(stringr::str_sub(type, 2, nchar(type)))
+    # }
+    # return(type)
+  # },
+  # USE.NAMES = FALSE
+# )
+
+chords_types <- unique(chords_types)
+
+print(chords_types)
+```
+
+## Create JSON with relevant chord progressions data
+
+```{r}
+final_json <- list()
+
+for (row in 1:nrow(df)) {
+  sections <- get_progression(df$songs_progressions[row]) |>
+    lapply(get_chords) |>
+    lapply(function(x) Filter(function(y) return(y != ""), x))
+
+  chords_per_section <- sections
+
+  # Transform each section into a list, setting chord names
+  for(i in 1:length(chords_per_section)) {
+    chords_per_section[[i]] <- sapply(
+      chords_per_section[[i]], translate_chord, USE.NAMES = FALSE
+    )
+  }
+
+  # Include song's name, author and links
+  links <- c(
+    # Link to main html page
+    df$songs_links[row],
+    # Link to the pdf with the sheet music
+    df$songs_links[row] |>
+      stringr::str_split("/") |>
+      unlist() |>
+      (\(x) x[-length(x)])() |>
+      paste0(collapse = "/") |>
+      paste0(
+        "/scores/",
+        df$songs_title_author[row] |>
+          (\(x) gsub(' ', '', x))() |>
+          (\(x) gsub('-', "_", x))() |>
+          paste0("_FINAL.pdf")
+      )
+  )
+
+  # Generate link for song's pdf file
+  song_data <- list(links = links)
+
+  # Include pitch class values of chords
+  for (i in 1:length(chords_per_section)) {
+    song_data <<- c(song_data, chords_per_section[i])
+    names(song_data)[length(song_data)] <- paste0("pitches-", i)
+  }
+
+  # Include names of chords
+  for (i in 1:length(sections)) {
+    song_data <<- c(song_data, sections[i])
+    names(song_data)[length(song_data)] <- paste0("chords-", i)
+  }
+
+  progression_data <- list(song_data)
+  names(progression_data) <- df$songs_title_author[row]
+
+  final_json <<- c(final_json, progression_data)
+}
+```
+
+```{r}
+# Replace "’" character (\u2019) with
+# "'" character, in jazz standards names
+names(final_json) <- names(final_json) |>
+  sapply(
+    function(name) {
+      # Song name first, then main music player
+      split_name <- unlist(stringr::str_split(name, " - "))
+      split_name <- paste0(
+        split_name[2], " - ", split_name[1]
+      )
+
+      # Change "’" character (\u2019) to "'"
+      if (grepl("\u2019", split_name, fixed = TRUE)) {
+        return(gsub("\u2019", "'", split_name))
+      }
+
+      return(split_name)
+    },
+    USE.NAMES = FALSE
+  )
+```
+
+```{r}
+names(final_json) |>
+  head(90) |>
+  tail(1) |>
+  cat()
+```
+
+
+## Sort jazz standard names alphabetically
+
+```{r}
+final_json <- final_json[sort(names(final_json))]
+```
+
+## Save JSON file
+
+```{r}
+jsonlite::write_json(
+  final_json, 
+  path = "./../data/web-scraped-chord-progressions.json",
+  # na = TRUE,
+  auto_unbox = TRUE
+)
+```
+
+
+

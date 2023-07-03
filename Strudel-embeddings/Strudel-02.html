@@ -1,0 +1,80 @@
+<!-- https://github.com/tidalcycles/strudel/tree/main/packages/embed#strudelcyclesembed -->
+
+<!-- 
+<strudel-repl>
+    samples({
+      bd: 'bd/BT0A0D0.wav',
+      sn: 'sn/ST0T0S3.wav',
+      hh: 'hh/000_hh3closedhh.wav'
+    }, 'https://loophole-letters.vercel.app/samples/tidal/')
+
+    stack(
+      "<bd!3 bd(3,4,3)>".color('#F5A623'),
+      "hh*4".color('#673AB7'),
+      "~ <sn!3 sn(3,4,2)>".color('#4CAF50')
+    ).s()
+    .pianoroll({fold:1})
+    
+    // John Coltrane - Giant Steps
+    setVoicingRange('lefthand', ['E3', 'G4']);
+
+    samples({
+      bd: 'samples/tidal/bd/BT0A0D0.wav',
+      sn: 'samples/tidal/sn/ST0T0S3.wav',
+      hh: 'samples/tidal/hh/000_hh3closedhh.wav',
+      rhodes: {
+      E1: 'samples/rhodes/MK2Md2000.mp3',
+      E2: 'samples/rhodes/MK2Md2012.mp3',
+      E3: 'samples/rhodes/MK2Md2024.mp3',
+      E4: 'samples/rhodes/MK2Md2036.mp3',
+      E5: 'samples/rhodes/MK2Md2048.mp3',
+      E6: 'samples/rhodes/MK2Md2060.mp3',
+      E7: 'samples/rhodes/MK2Md2072.mp3'
+      }
+    }, 'https://loophole-letters.vercel.app/')
+
+    stack(
+      seq(
+        "[B^7 D7] [G^7 Bb7] Eb^7 [Am7 D7]",
+        "[G^7 Bb7] [Eb^7 F#7] B^7 [Fm7 Bb7]",
+        "Eb^7 [Am7 D7] G^7 [C#m7 F#7]",
+        "B^7 [Fm7 Bb7] Eb^7 [C#m7 F#7]"
+      ).voicings('lefthand')
+    ).slow(20).note()
+      .s("rhodes")
+      .clip(1)
+      .room(.5)
+      .delay(.3)
+      .delayfeedback(.4)
+      .delaytime(1/12).gain(.5)
+    </strudel-repl>
+  -->
+
+<script>
+  /* 
+    Lucio's code:
+    Generate the code for a new Strudel repl,
+    delete the previous repl and insert a new one
+    with the necessary music code.
+    The user will have to manually click start and stop
+    for such repl to start playing sounds.
+  */
+  function createStrudelREPL(userCode) {
+    // userCode variable example: "note('c3')"
+    const code = userCode.trim()
+    setTimeout(() => {
+      const iframe = document.createElement('iframe');
+      const src = `https://strudel.tidalcycles.org/#${encodeURIComponent(btoa(code))}`;
+      iframe.setAttribute('src', src);
+      iframe.setAttribute('width', '600');
+      iframe.setAttribute('height', '400');
+      iframe.classList.add("strudel-repl");
+
+      // Only have one Strudel repl in the page
+      $('.strudel-repl').map(function() { this.remove() });
+      document.body.appendChild(iframe);
+    });
+  }
+
+  createStrudelREPL("note(c3).s('triangle')")
+</script>

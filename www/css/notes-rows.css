@@ -1,0 +1,119 @@
+:root {
+  /* Height of every note cell */
+  --note-height: 55px;
+  /* Minimum width of every note cell */
+  --note-width: 40px;
+  /* Width of every chord cell */
+  --chord-width: 80px;
+  /* Color for note registered by mic */
+  --registered-note-color: rgb(0, 0, 0);
+  /* 
+    Percentage (0 to 100) of pitch offset, 
+    where 50% represents "perfectly" tuned
+  */
+  --pitch-offset: 50%;
+}
+
+/* 
+  Container of rows of notes
+*/
+#rows-container {
+  margin-left: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: calc(5 * var(--note-height));
+}
+.notes-row {
+  display: flex;
+  flex-flow: row nowrap;
+  opacity: 0.6;
+  overflow-y: clip;
+  overflow-x: scroll;
+  height: var(--note-height);
+}
+.notes-row.playing { opacity: 1; }
+
+.notes-row:not(.playing) .note { opacity: 0.5; }
+
+/* Style notes */
+.note, .chord {
+  flex: 1;
+  display: flex;
+  color: white;
+  font-size: 125%;
+  align-items: center;
+  justify-content: center;
+  background-color: crimson;
+  min-width: var(--note-width);
+  border-right: solid 2px black;
+}
+.note.playing { 
+  /* Pitch offset line at 50% (no offset) */
+  background: linear-gradient(
+    to right, 
+    var(--registered-note-color) var(--pitch-offset), 
+    yellow calc(1px + var(--pitch-offset)), 
+    var(--registered-note-color) calc(3px + var(--pitch-offset))
+  );
+}
+.note.out-of-key {
+  color: white;
+  background-color: white;
+}
+.note.playing.out-of-key {
+  color: var(--registered-note-color);
+  background-color: var(--registered-note-color);
+}
+
+.chord {
+  top: 0;
+  left: 0;
+  opacity: 1;
+  z-index: 100;
+  color: black;
+  padding: 0 1rem;
+  cursor: pointer;
+  position: sticky;
+  white-space: nowrap;
+  min-width: var(--chord-width);
+  background-color: yellow;
+  border: thick double peru;
+  max-height: var(--note-height);
+  transition: all 420ms ease;
+}
+.chord.selected {
+  color: white;
+  background-color: black;
+  border: thick double yellow;
+  transition: all 420ms ease;
+}
+
+/* 
+  Chord progression display
+  (was removed, but may be useful in the future)
+*/
+/* #chord-progression {
+  display: flex;
+  max-width: 50vw;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  flex-direction: row;
+}
+#chord-progression:has(> div) {
+  border: thick double peru;
+}
+#chord-progression > div {
+  color: white;
+  white-space: nowrap;
+  max-height: var(--note-height);
+  padding: 0.6rem 0.7rem;
+  background-color: brown;
+  transition: opacity 300ms ease;
+}
+#chord-progression > div:not(:last-child) { 
+  border-right: 0.15rem dashed;
+}
+
+#chord-progression:has(> div.playing) > div:not(.playing) {
+  opacity: 0.65;
+} */

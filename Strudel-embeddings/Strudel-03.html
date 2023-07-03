@@ -1,0 +1,64 @@
+<p id="start">Start</p>
+<p id="stop">Stop</p>
+
+<script type="module">
+  import { controls, repl } from 'https://cdn.skypack.dev/@strudel.cycles/core@0.3.2';
+  // import * as exports1 from 'https://cdn.skypack.dev/@strudel.cycles/core@0.3.2';
+  // Object.entries(exports1).forEach(([name, exported]) => window[name] = exported);
+
+  import * as exports2 from 'https://cdn.skypack.dev/@strudel.cycles/webaudio@0.3.3';
+  Object.entries(exports2).forEach(([name, exported]) => window[name] = exported);
+  
+  import { samples } from 'https://cdn.skypack.dev/@strudel.cycles/webaudio@0.3.3';
+
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/csound@0.6.2';
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/embed@0.2.0';
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/eval@0.6.2';
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/midi@0.6.0';
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/mini@0.6.0';
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/osc@0.6.0';
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/serial@0.6.0';
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/soundfonts@0.6.0';
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/tonal@0.6.0';
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/tone@0.6.0';
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/transpiler@0.6.0';
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/webaudio@0.6.0';
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/webdirt@0.6.0';
+  // import * as exports3 from 'https://cdn.skypack.dev/@strudel.cycles/xen@0.6.0';
+  // Object.entries(exports3).forEach(([name, exported]) => window[name] = exported);
+
+  Object.entries(controls).forEach(([name, exported]) => window[name] = exported);
+  // const { note } = controls;
+
+  const ctx = getAudioContext()
+
+  const { scheduler } = repl({
+    defaultOutput: webaudioOutput,
+    getTime: () => ctx.currentTime
+  });
+
+  samples({
+    bd: 'samples/tidal/bd/BT0A0D0.wav',
+    sn: 'samples/tidal/sn/ST0T0S3.wav',
+    hh: 'samples/tidal/hh/000_hh3closedhh.wav',
+      rhodes: { 
+      E4: 'samples/rhodes/MK2Md2036.mp3',
+      E5: 'samples/rhodes/MK2Md2048.mp3',
+    }
+  }, 'https://loophole-letters.vercel.app/')
+
+
+  const pattern = note("a3 c#4 e4 a4")
+  // const pattern = note("<C^7 A7 Dm7 Fm7>/2".voicings('lefthand'))
+  scheduler.setPattern(pattern);
+
+
+  window['scheduler'] = scheduler;
+
+  document
+    .getElementById("start")
+    .addEventListener("click", () => scheduler.start());
+  document
+    .getElementById("stop")
+    .addEventListener("click", () => scheduler.stop());
+</script>

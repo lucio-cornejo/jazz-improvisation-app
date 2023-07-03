@@ -1,0 +1,48 @@
+/* 
+  Content of main tabset 
+*/
+#user-controls *:not(span[class^="irs"]) { font-size: 1.3rem; }
+
+#row-of-notes, #chords-delay { 
+  width: 2.6rem;
+  font-size: 1.23rem; 
+  margin-left: 0.5rem;
+}
+#chords-delay { width: 4rem; }
+
+/* 
+  Change width of jazz standard selection menu,
+  depending on the user's screen width
+*/
+@media (min-width: 1365px) {
+  .selectize-control:has(+ script[data-for="jazzStandards"]) { 
+    width: 39vw;
+  }
+}
+@media (max-width: 1364px) {
+  .selectize-control:has(+ script[data-for="jazzStandards"]) { 
+    width: 80vw;
+  }
+}
+
+#menus-wrapper { 
+  margin-top: calc(0.75 * var(--note-height)); 
+  margin-left: 1rem;
+  width: 95vw;
+}
+
+div:has(> div > label[for="row-of-notes"]) {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+/* 
+  Panel for web scraped jazz standards
+*/
+#three-panel * { font-size: 1.3rem; }
+.selectize-dropdown-content > div:hover { 
+  background-color: rgb(140, 160, 240); 
+}

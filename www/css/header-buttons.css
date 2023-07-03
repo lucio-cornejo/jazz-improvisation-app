@@ -1,0 +1,22 @@
+#main-buttons {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  flex-direction: column;
+}
+
+#main-buttons > * { 
+  margin: 0; 
+  border-radius: 20px; 
+}
+#download-music-data { color: revert; }
+
+#main-buttons > .shiny-input-container { padding: 0; }
+#main-buttons > .shiny-input-container 
+  .input-group { display: block; }
+  
+#main-buttons 
+  > .shiny-input-container 
+  > label:first-child { display: none; }
