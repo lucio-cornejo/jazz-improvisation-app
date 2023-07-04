@@ -8,6 +8,10 @@
   font-size: 1.5em;
 }
 
+*:not(:is(h1)) > a {
+  text-decoration: underline;
+}
+
 h1:not(:has([id])) {
   font-family: 'Twinkle Star', cursive;
 }

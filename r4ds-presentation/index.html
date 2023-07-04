@@ -102,7 +102,7 @@ class: center, middle
     &lt;span&gt;e.g. CM7 = C major 7&lt;/span&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;span&gt;Detect the user's frequency/note played&lt;/span&gt;
+    &lt;span&gt;Detect note played by user&lt;/span&gt;
     &lt;span&gt;e.g. using &lt;a href="https://meyda.js.org/"&gt;Meyda.js&lt;/a&gt;&lt;/span&gt;
   &lt;/li&gt;
   &lt;li&gt;
@@ -113,9 +113,67 @@ class: center, middle
     &lt;span&gt;Display relationship between selected song and notes played&lt;/span&gt;
     &lt;span&gt;&lt;/span&gt;
   &lt;/li&gt;
-
-  
 &lt;/ol&gt;
+
+---
+class: middle
+
+## Step 1: Web scraping songs
+
+- Code found [here](https://github.com/lucio-cornejo/jazz-improvisation-app/tree/main/web-scraping) .
+
+- Main library used: `Python`'s [BeautifulSoup](https://pypi.org/project/beautifulsoup4/).
+
+- Main database used: [The Jazzomat Research Project](https://jazzomat.hfm-weimar.de/dbformat/dbcontent.html) .
+
+- Final [result](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/data/web-scrapped-chord-progressions.json) .
+
+---
+class: middle
+
+## Step 2: Homogenize chords' notation
+
+- Chord notation [tranlation](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/data/chord-types-translator.json) used .
+
+- [Code](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/chord-types/02-translate-chord-types.js) for chord translation .
+
+---
+class: middle
+
+## Step 3: Detect note played by user
+
+- `ml5.js`'s note detection module is used.
+
+- [Code](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/www/js-main-or-modules/embed-ml5.js)
+where `ml5.js` is imported.
+
+- The code for the note detection should be kept isolated,
+so that it is easy to replace the tool for note detection
+([Pitchy.js](https://github.com/ianprime0509/pitchy), Meyda.js, etc).
+
+---
+class: middle
+
+## Step 4: Play user selected song
+
+- `Strudel.js` is being used to produce sound.
+
+- [Code](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/www/js-main-or-modules/embed-Strudel.js)
+where `Strudel.js` is imported.
+
+- The code for song playing should also be kept isolated, 
+for ease of replacement, for example, using [Tone.js](https://tonejs.github.io/).
+
+---
+class: middle
+
+## Step 5: Display relationship between selected song and notes played
+
+- Here `Shiny` and basic frontend knowledge comes in handy.
+
+- Example:
+
+(fix css colors for note degrees and put pic here)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

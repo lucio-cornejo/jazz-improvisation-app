@@ -13,30 +13,30 @@
 
 /* Variables for musical degree colors */
 :root {
-  --degree-1: rgb(0, 128, 0);
+  --degree-1: rgb(0, 130, 0);
   --degree-b2: rgb(120, 120, 120);
-  --degree-2: rgb(255, 0, 0);
+  --degree-2: rgb(250, 0, 0);
   --degree-b3: rgb(50, 50, 200);
-  --degree-3: rgb(100, 128, 0);
-  --degree-4: rgb(50, 50, 200);
-  --degree-b5: rgb(120, 120, 120);
-  --degree-5: rgb(128, 100, 0);
+  --degree-3: rgb(235, 185, 45);
+  --degree-4: rgb(100, 230, 60);
+  --degree-b5: rgb(55, 50, 50);
+  --degree-5: rgb(0, 130, 5);
   --degree-b6: rgb(120, 120, 120);
-  --degree-6: rgb(255, 0, 0);
-  --degree-b7: rgb(50, 50, 200);
-  --degree-7: rgb(150, 80, 0);
+  --degree-6: rgb(210, 95, 180);
+  --degree-b7: rgb(235, 220, 105);
+  --degree-7: rgb(0, 150, 150);
 }
 
 /* Default musical degree colors for notes */
-.degree-1 { background-color: var(--degree-1); }
-.degree-b2 { background-color: var(--degree-b2); }
-.degree-2 { background-color: var(--degree-2); }
-.degree-b3 { background-color: var(--degree-b3); }
-.degree-3 { background-color: var(--degree-3); }
-.degree-4 { background-color: var(--degree-4); }
-.degree-b5 { background-color: var(--degree-b5); }
-.degree-5 { background-color: var(--degree-5); }
-.degree-b6 { background-color: var(--degree-b6); }
-.degree-6 { background-color: var(--degree-6); }
-.degree-b7 { background-color: var(--degree-b7); }
-.degree-7 { background-color: var(--degree-7); }
+.note.degree-1 { background-color: var(--degree-1); }
+.note.degree-b2 { background-color: var(--degree-b2); }
+.note.degree-2 { background-color: var(--degree-2); }
+.note.degree-b3 { background-color: var(--degree-b3); }
+.note.degree-3 { background-color: var(--degree-3); }
+.note.degree-4 { background-color: var(--degree-4); }
+.note.degree-b5 { background-color: var(--degree-b5); }
+.note.degree-5 { background-color: var(--degree-5); }
+.note.degree-b6 { background-color: var(--degree-b6); }
+.note.degree-6 { background-color: var(--degree-6); }
+.note.degree-b7 { background-color: var(--degree-b7); }
+.note.degree-7 { background-color: var(--degree-7); }

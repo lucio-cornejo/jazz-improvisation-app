@@ -39,7 +39,7 @@
 .note, .chord {
   flex: 1;
   display: flex;
-  color: white;
+  color: black;
   font-size: 125%;
   align-items: center;
   justify-content: center;
