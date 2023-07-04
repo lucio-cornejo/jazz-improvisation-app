@@ -62,7 +62,7 @@ tagList(
     }),
     numericInput("tempo",  # this should be tempo
       label = "Tempo",
-      value = 200, min = 20, max = 400, step = 1
+      value = 120, min = 20, max = 400, step = 1
       # oninput="window.chordsDelay = this.value * 1000"
     )
     # Select the notes for the chord to be played

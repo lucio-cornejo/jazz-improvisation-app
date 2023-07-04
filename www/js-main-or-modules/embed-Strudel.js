@@ -19,24 +19,24 @@
 
   // Load scales for scale dropdown menu
   fetch("./data/chord-types-translator.json")
-  .then(response => { return response.json() })
-  .then(jsondata => {
-    globalThis.translatedVoicings = {};
-    // globalThis.translatedVoicings = new Map();
-    Object.values(jsondata).forEach(value => {
-      // globalThis.translatedVoicings.set(value[0], value[1]);
-      globalThis.translatedVoicings[value[0]] = value[1];
+    .then(response => { return response.json() })
+    .then(jsondata => {
+      // globalThis.translatedVoicings = new Map();
+      globalThis.translatedVoicings = {};
+      Object.values(jsondata).forEach(value => {
+        // globalThis.translatedVoicings.set(value[0], value[1]);
+        globalThis.translatedVoicings[value[0]] = value[1];
+      });
     });
-  });
   
   // Voicing dictionaries from: https://github.com/felixroos/chord-voicings/blob/main/src/dictionaryVoicing.ts
-  addVoicings('kk', globalThis.translatedVoicings, ['C3', 'C6']);
+  addVoicings('testing', globalThis.translatedVoicings, ['C3', 'C6']);
 
   function swing(chords, bpm) {
     return cat(`<${chords}>`)
       .layer(
-        //// (x) => x.voicings('lefthand').note().s('stage73').lpf(1000).lpq(12).gain(2.5),
-        (x) => x.voicings('kk').note().s('piano').lpf(1000).lpq(12).gain(0.5),
+        (x) => x.voicings('lefthand').note().s('stage73').lpf(1000).lpq(12).gain(2.5),
+        // (x) => x.voicings('testing').note().s('piano').lpf(1000).lpq(12).gain(0.5),
         (x) => x.rootNotes(2).note().struct('x*2').s('jazzbass')
       )
       .clip(1)

@@ -15,7 +15,8 @@ fetch("./data/chordsIntervals.json")
   });
 
 // Load web scrapped chord progressions
-fetch("./data/translated-scrapped-chord-progressions.json")
+fetch("./data/web-scrapped-chord-progressions.json")
+// fetch("./data/translated-scrapped-chord-progressions.json")
   .then(response => { return response.json() })
   .then(jsondata => { 
     // Save JSON data into a global variable
