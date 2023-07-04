@@ -113,7 +113,28 @@ class: center, middle
     &lt;span&gt;Display relationship between selected song and notes played&lt;/span&gt;
     &lt;span&gt;&lt;/span&gt;
   &lt;/li&gt;
+  &lt;li&gt;
+    &lt;span&gt;Allow user to customize music settings&lt;/span&gt;
+    &lt;span&gt;e.g. choose chords and scales&lt;/span&gt;
+  &lt;/li&gt;
 &lt;/ol&gt;
+
+---
+class: center
+
+# App's main objectives
+
+&lt;p style="margin-bottom: 50px;"&gt; &amp;nbsp; &lt;/p&gt;
+
+.highlight__1[
+**Facilitate** the user's experience of **creating** a music **solo**.
+]
+
+&lt;p style="margin-bottom: 50px;"&gt; &amp;nbsp; &lt;/p&gt;
+
+.highlight__1[
+**Show** the user each **note's tension evolution**, while the song plays.
+]
 
 ---
 class: middle
@@ -133,7 +154,7 @@ class: middle
 
 ## Step 2: Homogenize chords' notation
 
-- Chord notation [tranlation](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/data/chord-types-translator.json) used .
+- Chord notation [translation](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/data/chord-types-translator.json) used .
 
 - [Code](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/chord-types/02-translate-chord-types.js) for chord translation .
 
@@ -169,11 +190,84 @@ class: middle
 
 ## Step 5: Display relationship between selected song and notes played
 
-- Here `Shiny` and basic frontend knowledge comes in handy.
+- At this step, `Shiny` and basic frontend knowledge comes most in handy.
 
-- Example:
+- Examples:
 
-(fix css colors for note degrees and put pic here)
+.pull-left[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="./media/rows-of-notes.jpg" alt="Musical notes" width="1499" /&gt;
+&lt;p class="caption"&gt;Musical notes&lt;/p&gt;
+&lt;/div&gt;
+]
+
+--
+
+.pull-right[
+&lt;div class="figure" style="text-align: center"&gt;
+&lt;img src="./media/rows-of-degrees.jpg" alt="Musical degrees" width="1500" /&gt;
+&lt;p class="caption"&gt;Musical degrees&lt;/p&gt;
+&lt;/div&gt;
+]
+
+---
+class: middle
+
+## Step 6: Allow user to customize music settings
+
+- [Code](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/www/js/00-02-choose-degree-colors.js) for changing musical degree colors.
+
+- [Code](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/www/js/00-05-toggle-notes-degrees.js) for toggle between musical note or degree.
+
+- [Code](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/www/js/00-06-download-music-data.js) for saving the app's music settings (chosen scales and chords).
+
+- [Code](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/www/js/00-07-upload-music-data.js) for uploading the same type of file, to set the app's music settings (does not work yet).
+
+- [Code](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/www/js/01-01-root-scale-voicing-selections.js) for updating
+the root and scale of a single row of notes (chord change via dropdown menu does not work yet).
+
+- [Code](https://github.com/lucio-cornejo/jazz-improvisation-app/blob/main/www/js/02-05-update-chords-cells-via-Strudel.js) for updating
+the chords (and notes rows) via a text area, using `Strudel.js` (does not fully work yet).
+
+---
+
+&lt;p style="margin-bottom: -80px;"&gt; &amp;nbsp; &lt;/p&gt;
+
+# Future goals
+
+- Make app work in mobile (note detection fails so far).
+
+- Change the app's code structure into a package,
+as in `golem` fashion.
+
+- Make the app downloadble, so that the user can execute
+it more smoothly in their own machine (maybe using an `R` import of [Electron.js](https://www.electronjs.org/)).
+
+- Expand the number of songs in the database.
+
+- Expand the number of scales and chords in the database.
+
+- Incorporate AI into the app, for example, as [Google's AI duet](https://experiments.withgoogle.com/ai/ai-duet/view/).
+
+- Being able to record the user's notes played and download it as a MIDI file.
+
+- Output an analysis of the musical solo played by the 
+user, once the recording started.
+
+- User inputs a MIDI file consisting of only notes from a musical solo (for example, from a piano recording) and the app can show, sequentially, the notes played, using the app's rows of notes.
+
+---
+class: middle, center
+
+# Everyone is welcome to help in this project
+
+&lt;https://github.com/lucio-cornejo/jazz-improvisation-app&gt;
+
+--
+
+&lt;p style="margin-bottom: 75px;"&gt; &amp;nbsp; &lt;/p&gt;
+
+# Thank you!
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
