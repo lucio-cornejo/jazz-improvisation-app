@@ -1,0 +1,114 @@
+---
+title: "A Shiny app for Jazz improvisation"
+author: "Lucio Cornejo"
+date: 2023-07-08
+output:
+  xaringan::moon_reader:
+    css: 
+      - default
+      - rladies
+      - "rladies-fonts"
+      - styles.css
+    nature:
+      highlightStyle: haddock
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: 16:9
+      navigation:
+        scroll: false
+---
+
+# Who am I?
+
+--
+
+- Mathematics undergraduate from Latin America
+
+--
+
+- Frontend amateur
+
+--
+
+- Shiny enthusiast
+
+--
+
+- .highlight__1[Failed Jazz music player]
+
+
+---
+class: center
+
+# A New Hope
+
+--
+
+<p style="margin-bottom: 20px;"> &nbsp; </p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/-TGIvKZQmGk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+</iframe>
+
+???
+Just show first minute of video.
+
+---
+
+# But ...
+
+--
+
+- .highlight__2[Not free]
+
+--
+
+- .highlight__2[Not for Android]
+
+--
+
+<p style="margin-bottom: 50px;"> &nbsp; </p>
+
+.pull-left[
+  # Therefore ...
+]
+
+--
+
+.thanos-gif[
+<video preload="auto" loop="" autoplay="" width="500" height="300">
+<source src="https://media.tenor.com/vCqpL7x4sPUAAAPs/thanos-fine-ill-do-it-myself.webm" type="video/webm">
+</video>
+]
+
+---
+class: center, middle
+
+# [Demo](https://lucio-cornejo.shinyapps.io/jazz-improvisation-app/)
+
+---
+
+# App's basic functionality
+
+<ol id="functionality">
+  <li>
+    <span>Web scrap chords for popular songs</span>
+    <span>Is jazz still popular? :/</span>  
+  <li>
+    <span>Homogenize chords' notation</span>
+    <span>e.g. CM7 = C major 7</span>
+  </li>
+  <li>
+    <span>Detect the user's frequency/note played</span>
+    <span>e.g. using <a href="https://meyda.js.org/">Meyda.js</a></span>
+  </li>
+  <li>
+    <span>Play user selected song</span>
+    <span>e.g. using <a href="https://strudel.tidalcycles.org/?C7umG4U5a1Pi">Strudel.js</a></span>
+  </li>
+  <li>
+    <span>Display relationship between selected song and notes played</span>
+    <span></span>
+  </li>
+
+  
+</ol>

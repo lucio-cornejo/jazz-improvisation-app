@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Twinkle+Star&display=swap');
+
+.remark-container {
+  background: black;
+}
+
+.remark-slide-content {
+  font-size: 1.5em;
+}
+
+h1:not(:has([id])) {
+  font-family: 'Twinkle Star', cursive;
+}
+
+.highlight__1, .highlight__2 {
+  font-size: 150%;
+  color: crimson;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+p:has(> .highlight__1) {
+  margin-top: 100px;
+}
+
+.thanos-gif {
+  position: absolute;
+  top: 50%;
+  right: 10%;
+  transform: scale(1.5);
+}
+#functionality li {
+  padding: 20px 0;
+}
+
+#functionality li span:not(:first-child) {
+  color: black;
+  opacity: 0;
+  font-size: 50%;
+  font-family: cursive;
+  position: absolute;
+  right: 250px;
+}
+
+#functionality li:hover {
+  color: crimson;
+  font-size: 150%;
+  transition: font-size .75s;
+}
+
+#functionality li:hover span:not(:first-child) {
+  opacity: 0.75;
+  transition: opacity 3s;
+}
