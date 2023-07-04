@@ -148,13 +148,13 @@ function colorNotePlayed() {
   */
 
   
-  /*
-  // notePlaying.scrollIntoViewIfNeeded();
+  // /*
+  notePlaying.scrollIntoViewIfNeeded();
   // notePlaying.scrollIntoView( {block: "center", inline: "center"} );
-  notePlaying.scrollIntoView( {block: "center"} );
+  // notePlaying.scrollIntoView( {block: "center"} );
 
   const currentScroll = notePlaying.parentElement.scrollLeft;
   Array.from(document.getElementById("rows-container").children)
     .forEach(row => { row.scrollTo({ left: currentScroll }) });
-  */
+  // */
 }
