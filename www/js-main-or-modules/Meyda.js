@@ -5,13 +5,22 @@ async function MeydaSetup (ctx) {
   if (typeof Meyda === "undefined") {
     console.log("Meyda could not be found! Have you included it?");
   } else {
+    Shiny.shinyapp.$inputValues.notesMaxChroma = [];
+
     const analyzer = Meyda.createMeydaAnalyzer({
       audioContext: ctx,
       source: source,
-      bufferSize: 512,
-      featureExtractors: ["rms"],
+      bufferSize: 512 * 8,
+      featureExtractors: ["rms", "energy", "chroma"],
       callback: (features) => {
-        console.log(features);
+        const chroma = features.chroma;
+        const index = chroma.reduce((accumulator, current, index) => {
+          return current > chroma[accumulator] ? index : accumulator;
+        }, 0);
+        
+        const temp = Shiny.shinyapp.$inputValues.notesMaxChroma;
+        temp.push(index);
+        Shiny.setInputValue("notesMaxChroma", temp)
       },
     });
     analyzer.start();

@@ -61,8 +61,8 @@
   const initAudio = initAudioOnFirstClick();
   const ctx = getAudioContext();
 
-  MeydaSetup(ctx);
-  // ml5Setup(ctx);
+  // MeydaSetup(ctx);
+  ml5Setup(ctx);
 
   const loadSamples = Promise.all([
     samples('github:felixroos/samples/main'),

@@ -47,6 +47,9 @@ ui <- dashboardPage(
     tags$body(
       ui_degree_colors,
       ui_notes_rows_controls,
+      
+      # plotOutput("notesPLot"),
+      
       ui_notes_rows,
       box(width = 12,
         collapsible = TRUE, collapsed = FALSE,
@@ -78,6 +81,10 @@ server <- function(input, output, session) {
       type = "scale-root",
       message = input[["scale-root"]]
     )
+  })
+
+  output$notesPLot <- renderPlot({
+    plot(input$notesMaxChroma)
   })
 }
 
