@@ -5,12 +5,15 @@ tagList(
     ~ includeCSS(path = paste0("./www/css/", .x))
   ),
   
-  
+
   # Load Meyda.js
   tags$script(
-    src = "https://unpkg.com/meyda/dist/web/meyda.min.js"
+    # src = "https://unpkg.com/meyda/dist/web/meyda.min.js"
+    # src = "https://cdn.jsdelivr.net/npm/meyda@5.6.2/dist/web/meyda.min.js"
+    src = "./www/js-main-or-modules/meyda-utils.js"
   ),
   tags$script(
+    # type = "module", 
     src="./www/js-main-or-modules/Meyda.js"
   ),
 
