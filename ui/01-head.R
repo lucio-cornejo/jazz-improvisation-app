@@ -15,17 +15,21 @@ tagList(
   # tags$script(src = "./www/js-main-or-modules/Meyda.js"),
 
 
+
+
+  # tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/p5.js"),
+  # tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/addons/p5.sound.min.js"),
+
+
+
   # Load ml5.js to use live note recognition
-  tags$script(
-    src = "https://unpkg.com/ml5@latest/dist/ml5.min.js"
-  ),
+  tags$script(src = "https://unpkg.com/ml5@latest/dist/ml5.min.js"),
   # # Connect ml5.js to this application
   tags$script(src="./www/js-main-or-modules/embed-ml5.js"),
   
   # Load Strudel necessary dependencies
-  tags$script(
-    type = "module", src = "./www/js-main-or-modules/embed-Strudel.js"
-  ),
+  tags$script(type = "module", src = "./www/js-main-or-modules/embed-Strudel.js"),
+
   # Load non module JavaScript files
   purrr::map(
     dir("./www/js/"),

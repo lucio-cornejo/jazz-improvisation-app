@@ -7,3 +7,4 @@ globalThis.musicData = {
 
 // Store registered frequencies
 globalThis.freqHistory = [];
+globalThis.freqVolumes = [];
